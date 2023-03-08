@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    sendRequest("https://codeyad.com/");
+    sendRequest("https://dehghanifard.ir/%d8%a2%d9%85%d9%88%d8%b2%d8%b4-%d8%a8%d8%b1%d9%86%d8%a7%d9%85%d9%87-%d9%86%d9%88%db%8c%d8%b3%db%8c-%d8%ba%db%8c%d8%b1-%d9%87%d9%85%d8%b2%d9%85%d8%a7%d9%86-%d8%af%d8%b1-%d8%b2%d8%a8%d8%a7%d9%86-%d8%af/");
     super.initState();
   }
 
@@ -68,19 +68,24 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-}
 
-sendRequest(String url) async {
-  Client httpClient = Client();
-  final response = await httpClient.get(Uri.parse(url));
-  if(response.statusCode == 200){
-    var doc = parse(response.body);
-    doc.getElementsByTagName("p").toList().forEach((element) {
-      texts.add(element.text);
-    });
-    print(doc.getElementsByTagName("p").length);
-  }else{
-    throw Exception();
+  sendRequest(String url) async {
+    Client httpClient = Client();
+    final response = await httpClient.get(Uri.parse(url));
+    if(response.statusCode == 200){
+      var doc = parse(response.body);
+      doc.getElementsByTagName("p").toList().forEach((element) {
+       texts.add(element.text);
+        setState(() {
+
+        });
+      });
+      print(doc.getElementsByTagName("p").length);
+    }else{
+      throw Exception();
+    }
   }
 }
+
+
 
