@@ -9,6 +9,7 @@ void main() {
 }
 
 List texts = [];
+List tit = [];
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -21,16 +22,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         // This is the theme of your application.
         //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+
+        primarySwatch: Colors.red,
       ),
       home: const HomePage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -43,27 +39,46 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   void initState() {
-    sendRequest("https://dehghanifard.ir/%d8%a2%d9%85%d9%88%d8%b2%d8%b4-%d8%a8%d8%b1%d9%86%d8%a7%d9%85%d9%87-%d9%86%d9%88%db%8c%d8%b3%db%8c-%d8%ba%db%8c%d8%b1-%d9%87%d9%85%d8%b2%d9%85%d8%a7%d9%86-%d8%af%d8%b1-%d8%b2%d8%a8%d8%a7%d9%86-%d8%af/");
+    sendRequest(
+        "https://dehghanifard.ir/%d8%a2%d9%85%d9%88%d8%b2%d8%b4-%d8%a8%d8%b1%d9%86%d8%a7%d9%85%d9%87-%d9%86%d9%88%db%8c%d8%b3%db%8c-%d8%ba%db%8c%d8%b1-%d9%87%d9%85%d8%b2%d9%85%d8%a7%d9%86-%d8%af%d8%b1-%d8%b2%d8%a8%d8%a7%d9%86-%d8%af/");
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text("parse html in dart"),
+        title: Center(
+          child: Text(
+            tit.toString(),
+            style: const TextStyle(
+                fontFamily: "Peyda", fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ),
       ),
       body: SizedBox(
         width: double.infinity,
         child: ListView.builder(
-            itemCount: texts.length,
-            itemBuilder: (context, index) {
-              return Directionality(textDirection: TextDirection.rtl,child: Text(texts[index],style: const TextStyle(color: Colors.black),));
-            },
+          itemCount: texts.length,
+          itemBuilder: (context, index) {
+            return Directionality(
+                textDirection: TextDirection.rtl,
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Text(
+                    texts[index],
+                    textAlign: TextAlign.justify,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontFamily: "Peyda",
+                      fontSize: 15,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                ));
+          },
         ),
       ),
     );
@@ -72,20 +87,25 @@ class _HomePageState extends State<HomePage> {
   sendRequest(String url) async {
     Client httpClient = Client();
     final response = await httpClient.get(Uri.parse(url));
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       var doc = parse(response.body);
       doc.getElementsByTagName("p").toList().forEach((element) {
-       texts.add(element.text);
-        setState(() {
+        if (doc.getElementsByTagName("p").length > 20) {
+          texts.add(element.text);
+        }
 
-        });
+        setState(() {});
       });
+
+      doc.getElementsByTagName("h1").toList().forEach(
+        (element) {
+          tit.add(element.text);
+        },
+      );
+
       print(doc.getElementsByTagName("p").length);
-    }else{
+    } else {
       throw Exception();
     }
   }
 }
-
-
-
