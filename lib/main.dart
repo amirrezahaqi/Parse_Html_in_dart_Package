@@ -35,24 +35,34 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+
+  @override
+  void initState() {
     sendRequest("https://codeyad.com/");
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("parse html in dart"),
       ),
       body: SizedBox(
         width: double.infinity,
-        height: 500,
         child: ListView.builder(
             itemCount: texts.length,
             itemBuilder: (context, index) {
-
-              return texts[index];
+              return Directionality(textDirection: TextDirection.rtl,child: Text(texts[index],style: const TextStyle(color: Colors.black),));
             },
         ),
       ),
@@ -66,7 +76,7 @@ sendRequest(String url) async {
   if(response.statusCode == 200){
     var doc = parse(response.body);
     doc.getElementsByTagName("p").toList().forEach((element) {
-        texts.add(element.text);
+      texts.add(element.text);
     });
     print(doc.getElementsByTagName("p").length);
   }else{
